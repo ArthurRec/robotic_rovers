@@ -1,0 +1,2 @@
+class AbroadPlateauException(Exception):
+    pass
