@@ -4,9 +4,11 @@ from logger import logger
 
 from src.core.api.utils.adapt_data import to_dict
 from src.core.api.utils.response import (
-    SuccessResponse, InternalServerErrorResponse, api_respond)
-from src.core.errors.direction import (
-    NotValidDirectionError, DirectionTypeError)
+    SuccessResponse,
+    InternalServerErrorResponse,
+    api_respond,
+)
+from src.core.errors.direction import NotValidDirectionError, DirectionTypeError
 from src.core.handlers.run_rovers import run_rovers
 from src.core.plateau.errors import AbroadPlateauException
 from src.core.utils.files import get_file_path
@@ -29,27 +31,31 @@ def get_rovers_movements(file_name: str) -> str:
         # prepare result
         rovers_data: dict = to_dict(rovers_results)
         response = {
-            'status_code': SuccessResponse().status_code.value,
-            'body': {
-                'rovers_positions': rovers_data
-            },
+            "status_code": SuccessResponse().status_code.value,
+            "body": {"rovers_positions": rovers_data},
         }
-        logger.info(f'success response: {response}')
+        logger.info(f"success response: {response}")
 
     except (
-            FileNotFoundError, TypeError, json.JSONDecodeError, AttributeError, ValueError,
-            NotValidDirectionError, DirectionTypeError, AbroadPlateauException
+        FileNotFoundError,
+        TypeError,
+        json.JSONDecodeError,
+        AttributeError,
+        ValueError,
+        NotValidDirectionError,
+        DirectionTypeError,
+        AbroadPlateauException,
     ) as exc:
         logger.error(exc)
         response = {
-            'status_code': InternalServerErrorResponse().status_code.value,
-            'body': {
-                'rovers_positions': {},
-                'error_message': str(exc),
-            }
+            "status_code": InternalServerErrorResponse().status_code.value,
+            "body": {
+                "rovers_positions": {},
+                "error_message": str(exc),
+            },
         }
 
     return api_respond(
-        body=response.get('body'),
-        status=response.get('status_code'),
+        body=response.get("body"),
+        status=response.get("status_code"),
     )

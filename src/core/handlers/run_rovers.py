@@ -33,7 +33,9 @@ def run_rovers(file_name: str) -> list[str]:
 
         except StopIteration as exc:
             # TODO: change logger output from f string to more lightweight way
-            logger.info(f"Generator finished because it had retrieved all data from file: {exc}")
+            logger.info(
+                f"Generator finished because it had retrieved all data from file: {exc}"
+            )
             break
 
         else:

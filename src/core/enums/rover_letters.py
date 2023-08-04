@@ -5,12 +5,13 @@ class RoverPossibleLettersEnum:
     spot. 'M' means move forward one grid point, and maintain the same
     Heading.
     """
+
     L = "L"
     R = "R"
     M = "M"
 
     values = {
-        'L': L,
-        'R': R,
-        'M': M,
+        "L": L,
+        "R": R,
+        "M": M,
     }

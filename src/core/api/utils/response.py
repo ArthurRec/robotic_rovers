@@ -23,10 +23,12 @@ def api_respond(body: Any, status: int = HTTPStatus.OK) -> str:
     """
     Create unified API respond
     """
-    result_json = json.dumps({
-        'statusCode': status,
-        'headers': {'Content-Type': 'application/json'},
-        'body': body
-    })
+    result_json = json.dumps(
+        {
+            "statusCode": status,
+            "headers": {"Content-Type": "application/json"},
+            "body": body,
+        }
+    )
 
     return result_json

@@ -12,4 +12,5 @@ ROTATION_DEGREES_VALUE = 90
 
 # path to all data files
 STORAGE_PATH = os.path.join(
-    Path(os.path.dirname(__file__)).parent.parent.parent.absolute(), 'storage')
+    Path(os.path.dirname(__file__)).parent.parent.parent.absolute(), "storage"
+)
