@@ -54,9 +54,9 @@ def add_docstring(file_path):
             # To avoid OpenAI rate limit (only free trial accounts have rate
             # limit, comment the code below if you have a paid account)
             # Free trial accounts have a hard cap of 1 request every 20 seconds
-            if time.time() - current_time < 200:
+            if time.time() - current_time < 21:
                 # Sleep for remaining time
-                time.sleep(200 - (time.time() - current_time) + 1)
+                time.sleep(21 - (time.time() - current_time) + 1)
 
             # Extract the function code
             function_code = node.dumps()
