@@ -17,7 +17,12 @@ starting_prompt = dict(
         "content": "I will send you a code of Python function. You need to "
                    "analyse the code and return to me a string that I can "
                    "use as the docstring for that function, so as to improve "
-                   "my documentation. The functions can also be routes of a Web App, handle those cases too. Donot write any explanations, just send me a string that I can use as the docstring. The language style of the docstring should be simple and easy to understand and it should be in Google Style Multi-Line format",
+                   "my documentation. The functions can also be routes of a "
+                   "Web App, handle those cases too. Donot write any "
+                   "explanations, just send me a string that I can use as "
+                   "the docstring. The language style of the docstring "
+                   "should be simple and easy to understand and it should "
+                   "be in Google Style Multi-Line format",
     }
 )
 history = [
@@ -46,7 +51,8 @@ def addDocstring(filePath):
     for node in code.find_all("def"):
         # Check if function already has a docstring
         if not node.value[0].type == "string":
-            # To avoid OpenAI rate limit (only free trial accounts have rate limit, comment the code below if you have a paid account)
+            # To avoid OpenAI rate limit (only free trial accounts have rate
+            # limit, comment the code below if you have a paid account)
             # Free trial accounts have a hard cap of 1 request every 20 seconds
             if time.time() - currentTime < 20:
                 # Sleep for remaining time
@@ -55,7 +61,8 @@ def addDocstring(filePath):
             # Extract the function code
             function_code = node.dumps()
 
-            # Send the function code to ChatGPT API for generating docstring (offcourse use GPT4 API if you hace access to it)
+            # Send the function code to ChatGPT API for generating docstring
+            # (offcourse use GPT4 API if you hace access to it)
             response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 temperature=0.2,
