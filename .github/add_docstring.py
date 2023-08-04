@@ -31,20 +31,20 @@ history = [
 
 
 # Define function to add docstring to Python functions
-def addDocstring(filePath):
+def add_docstring(file_path):
     """
     Adds docstring to Python functions using OpenAI API
 
     Args:
-        filePath (str): Path to the Python file
+        file_path (str): Path to the Python file
 
     Returns:
         None
     """
-    currentTime = time.time()
+    current_time = time.time()
 
     # Open the Python file using RedBaron library
-    with open(filePath, "r", encoding="utf-8") as file:
+    with open(file_path, "r", encoding="utf-8") as file:
         code = RedBaron(file.read())
 
     # Loop through all functions in the Python file
@@ -54,17 +54,17 @@ def addDocstring(filePath):
             # To avoid OpenAI rate limit (only free trial accounts have rate
             # limit, comment the code below if you have a paid account)
             # Free trial accounts have a hard cap of 1 request every 20 seconds
-            if time.time() - currentTime < 200:
+            if time.time() - current_time < 200:
                 # Sleep for remaining time
-                time.sleep(200 - (time.time() - currentTime) + 1)
+                time.sleep(200 - (time.time() - current_time) + 1)
 
             # Extract the function code
             function_code = node.dumps()
 
             # Send the function code to ChatGPT API for generating docstring
-            # (offcourse use GPT4 API if you hace access to it)
+            # (of course use GPT4 API if you hace access to it)
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",  # -16k
+                model="gpt-3.5-turbo-16k",
                 temperature=0.2,
                 messages=[
                     *history,
@@ -72,34 +72,36 @@ def addDocstring(filePath):
                 ],
             )
 
-            currentTime = time.time()
+            current_time = time.time()
 
             # Extract the generated docstring from the OpenAI response
             docstring = response.choices[0].message.content
 
-            # Remove the quotes from the generated docstring if present
-            if docstring.startswith('"""') or docstring.startswith("'''"):
-                docstring = docstring[3:-3]
-            if docstring.startswith('"'):
-                docstring = docstring[1:-1]
+            if docstring:
 
-            # Add the function code and generated docstring to history
-            history.append({"role": "user", "content": function_code})
-            history.append(
-                {
-                    "role": "assistant",
-                    "content": docstring,
-                }
-            )
+                # Remove the quotes from the generated docstring if present
+                if docstring.startswith('"""') or docstring.startswith("'''"):
+                    docstring = docstring[3:-3]
+                if docstring.startswith('"'):
+                    docstring = docstring[1:-1]
 
-            # Insert the generated docstring to the Function node
-            if node.next and node.next.type == "comment":
-                node.next.insert_after(f'"""\n{docstring}\n"""')
-            else:
-                node.value.insert(0, f'"""\n{docstring}\n"""')
+                # Add the function code and generated docstring to history
+                history.append({"role": "user", "content": function_code})
+                history.append(
+                    {
+                        "role": "assistant",
+                        "content": docstring,
+                    }
+                )
+
+                # Insert the generated docstring to the Function node
+                if node.next and node.next.type == "comment":
+                    node.next.insert_after(f'"""\n{docstring}\n"""')
+                else:
+                    node.value.insert(0, f'"""\n{docstring}\n"""')
 
     # Write the modified Python file back to disk
-    with open(filePath, "w", encoding="utf-8") as file:
+    with open(file_path, "w", encoding="utf-8") as file:
         file.write(code.dumps())
 
     # Format the new file with autoflake and black
@@ -109,13 +111,13 @@ def addDocstring(filePath):
             "--in-place",
             "--remove-unused-variables",
             "--remove-all-unused-imports",
-            filePath,
+            file_path,
         ]
     )
-    subprocess.run(["black", filePath])
+    subprocess.run(["black", file_path])
 
 
 # Run the function if this script is called directly
 if __name__ == "__main__":
-    filePath = sys.argv[1]
-    addDocstring(filePath)
+    file_path = sys.argv[1]
+    add_docstring(file_path)
