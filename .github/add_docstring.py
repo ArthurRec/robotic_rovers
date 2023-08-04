@@ -54,9 +54,9 @@ def addDocstring(filePath):
             # To avoid OpenAI rate limit (only free trial accounts have rate
             # limit, comment the code below if you have a paid account)
             # Free trial accounts have a hard cap of 1 request every 20 seconds
-            if time.time() - currentTime < 20:
+            if time.time() - currentTime < 200:
                 # Sleep for remaining time
-                time.sleep(20 - (time.time() - currentTime) + 1)
+                time.sleep(200 - (time.time() - currentTime) + 1)
 
             # Extract the function code
             function_code = node.dumps()
@@ -64,7 +64,7 @@ def addDocstring(filePath):
             # Send the function code to ChatGPT API for generating docstring
             # (offcourse use GPT4 API if you hace access to it)
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model="gpt-3.5-turbo",  # -16k
                 temperature=0.2,
                 messages=[
                     *history,
